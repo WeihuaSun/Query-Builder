@@ -55,12 +55,12 @@ def query_2_sql(query: Query, table: Table, aggregate=True, split=False, dbms='p
                 preds.append(f"({col} between {val[0]} and {val[1]})")
         else:
             preds.append(f"{col} {op} {val}")
-    return f"SELECT {'COUNT(*)' if aggregate else '*'} FROM {table.name}` WHERE {' AND '.join(preds)}"
-    # f"SELECT {'COUNT(*)' if aggregate else '*'} FROM \"{table.name}\" WHERE {' AND '.join(preds)}"
+    return f"SELECT {'COUNT(*)' if aggregate else '*'} FROM {table.name} WHERE {' AND '.join(preds)};"
+     
 
 
 def dump_sqls(queryset,table):
-    with open('test.csv', 'w',newline='') as f:
+    with open('test.sql', 'w') as f:
         writer = csv.writer(f)
         for query in queryset:
             sql = query_2_sql(query, table, aggregate=False)
@@ -87,7 +87,7 @@ if __name__ == "__main__":
                     help="name"          
     )
     parser.add_argument('--number',
-                    default=1000,
+                    default=10000,
                     type = int,
                     required = False,
                     help="number of queries"          
