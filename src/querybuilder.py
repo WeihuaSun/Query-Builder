@@ -78,7 +78,7 @@ if __name__ == "__main__":
                     default="census",
                     type = str,
                     required = False,
-                    help="datasets"          
+                    help="datasets name"          
     )
     parser.add_argument('--name',
                     default="newquery",
@@ -90,14 +90,14 @@ if __name__ == "__main__":
                     default=1000,
                     type = int,
                     required = False,
-                    help="Random seed"          
+                    help="number of queries"          
     )
     parser.add_argument('--params',
                     default="{'attr': {'pred_number': 1.0}, \
                             'center': {'distribution': 0.9, 'vocab_ood': 0.1}, \
                             'width': {'uniform': 0.5, 'exponential': 0.5}}",
                     required=False,
-                    help='Number of CPU cores per trial.')
+                    )
     args = parser.parse_args()
     if args.seed is None:
         seed = int(time())
