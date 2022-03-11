@@ -1,10 +1,24 @@
+"""
+This is the module of the dataset,including table loading, attribute analysis.
+"""
+
 import os
 import pandas as pd
 import numpy as np
-from constants import DATA_ROOT, OUTPUT_ROOT,PKL_PROTO,TEMP_ROOT
+from .constants import DATA_ROOT,TEMP_ROOT
 from collections import OrderedDict
 class Table(object):
+    """
+    This is a table class, read the data and create the table, parse the table attribute information.
+    """
     def __init__(self, dataset):
+        """
+        Read the data and initialize the table to get the number of rows and columns of the table,
+        as well as information about each attribute
+
+        Args:
+            dataset:The data set to read
+        """
         self.dataset = dataset
         self.name = f"{self.dataset}"
         # load data
@@ -22,7 +36,17 @@ class Table(object):
     def __repr__(self):
         return f"Table {self.name} ({self.row_num} rows, {self.data_size_mb:.2f}MB, columns:\n{os.linesep.join([repr(c) for c in self.columns.values()])})"
 class Column(object):
+    """
+    This is a column class that reads a column of table  and parses it to get some information about the column.  
+    """
     def __init__(self, name, data):
+        """
+        Initializes information about the column, including type, length, maximum and minimum values.  
+
+        Args:
+            name: Name of attribute
+            data: Columns of data
+        """
         self.name = name
         self.dtype = data.dtype
 
@@ -33,6 +57,9 @@ class Column(object):
         self.maxval = self.vocab[-1]
 
     def __repr__(self):
+        """
+        Report column information.
+        """
         return f'Column({self.name}, type={self.dtype}, vocab size={self.vocab_size}, min={self.minval}, max={self.maxval}, has NaN={self.has_nan})'
 
     def __parse_vocab(self, data):
@@ -53,6 +80,12 @@ def load_table(dataset: str) -> Table:
 
 
 def csv_to_pkl(table_name: str):
+    """
+    This function converts CSV file to pickle file.
+
+    Args:
+        table_name:The name or path of the csv table
+    """
     table_path = DATA_ROOT / f"{table_name}.csv"
     temp_table_path = TEMP_ROOT 
     if not temp_table_path.exists():
