@@ -3,7 +3,6 @@
 
 ## 生成查询流程
 
-
 1.从表中选择某些属性；
 
 
@@ -14,18 +13,22 @@
 |asf_comb|选择使用者输入的属性(comb)|comb:输入的属性列表|
 
 2.为这些属性选择中心点；
+
 |方法|实现方式|可选参数|
 |---|---|---|
 |csf_distribution|首先在表中随机选择1000行作为中心点的候选行。当属性需要中心点时，选择某一行对应属性的值作为其中心点。|data_from：从哪一行开始选择|
 |csf_vocab_ood|为每个属性单独随机选择一个点作为中心点|-|
 
 3.根据属性和中心点选择一个宽度。
+
 |方法|实现方式|可选参数|
 |---|---|---|
 |wsf_uniform|从属性列的最大值和最小值之间概率均等的选择一个值作为宽度width,然后根据宽度选择<=,>=,=,[]作为相应谓词。Nan和Nat,以及null都只能选择"="作为谓词。|-|
 |wsf_exponential|通过指数分布选择宽度值|-|
 |wsf_naru|1.首先从"="">=""<="之间随机选择一个操作符2.选择对应属性的中心点作为操作数。若属性值的数量不超过10，则仅选择相等谓词。|-|
 |wsf_equal|只选择相等谓词|-|
+
+
 ## 文件说明
 
 |文件|作用|
@@ -37,7 +40,34 @@
 |generator.py|在表上生成查询|
 |main.py|生成sql查询集|
 
+
+```mermaid
+graph TD
+A[单表] -->B(属性选择)
+    B --> asf_pred_number
+    B --> asf_comb
+  	asf_pred_number -->C[中心点选择]
+    asf_comb -->C[中心点选择]
+    C --> csf_distribution
+    C --> csf_vocab_ood
+    csf_distribution --> D[宽度选择]
+    csf_vocab_ood --> D[宽度选择]
+    D --> wsf_uniform 
+    D --> wsf_exp
+    D -->wsf_naru
+    D -->wsf_equal
+    wsf_uniform -->E[查询集]
+    wsf_exp-->E[查询集]
+    wsf_naru-->E[查询集]
+    wsf_equal-->E[查询集]
+    E-->SQL查询
+   
+```
+
+
+
 ## 如何使用
+
 data目录下存放要读取的单表数据，结果保存在output目录下。
 ```bash
 python -m main [--s <seed>] [--d <dataset>]  [-q <query>] [--params <params>]
