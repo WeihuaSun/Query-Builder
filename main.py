@@ -1,12 +1,12 @@
 """
 Usage:
-  python main  [--s <seed>] [--d <dataset>]  [-q <query>] [--params <params>] 
+  python -m main  [--s <seed>] [--d <dataset>]  [-q <query>] [--params <params>] 
   params:"  {'attr': {'pred_number': p1[, 'fun2': p2]}, \
             'center': {'distribution': p1[, 'fun2': p2]}, \
             'width': {'uniform': p1[, 'fun2': p2]},\
             'attr_params':{'whitelist':['age','workclass']},\
-            'center_params':{}
-            'width_params':{}
+            'center_params':{},
+            'width_params':{},
             }  "
  
 Options:
@@ -16,7 +16,7 @@ Options:
   --n <number>              The number of queries to be generated[default: 10000].
   --params <params>         Parameters that are needed.
 """
-import sys
+
 from src import generator
 import random
 import csv
